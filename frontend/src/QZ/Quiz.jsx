@@ -18,7 +18,7 @@ const Quiz = () => {
         setSelectedOption('');
         setResult(null);
         try {
-            const response = await axios.get('https://qz-1pnv6fmxy-mridul588s-projects.vercel.app/api/user/qz');
+            const response = await axios.get(`https://qz-var.vercel.app/api/user/qz`);
             setQuizData(response.data);
             setLoading(false);
         } catch (error) {
