@@ -34,7 +34,7 @@ const HomeCompo = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/user/add', wordData, { headers });
+            const response = await axios.post('https://qz-1pnv6fmxy-mridul588s-projects.vercel.app/api/user/add', wordData, { headers });
             alert('Word added successfully!');
             setWordData({ word: "", meaning: "" }); // Clear the form
         } catch (error) {
