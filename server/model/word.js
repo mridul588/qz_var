@@ -6,6 +6,8 @@ const { Schema } = mongoose;
 const wordSchema = new Schema({
     word: { type: String, required: true, unique: true },
     meaning: { type: String, required: true },
+    correctCount: { type: Number, default: 0 }, 
+    incorrectCount: { type: Number, default: 0 } 
 });
 
 const Word = mongoose.model('Word', wordSchema);

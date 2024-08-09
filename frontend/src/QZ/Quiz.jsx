@@ -20,6 +20,7 @@ const Quiz = () => {
         try {
             const response = await axios.get(`https://qz-var.vercel.app/api/user/qz`);
             setQuizData(response.data);
+            console.log(response.data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching quiz data:', error);
@@ -29,15 +30,32 @@ const Quiz = () => {
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
+        console.log(selectedOption);
     };
 
-    const handleSubmit = () => {
-        if (selectedOption === quizData.correctAnswer) {
-            setResult('Correct!');
-        } else {
-            setResult('Incorrect! The correct answer was ' + quizData.correctAnswer);
+    // const handleSubmit = () => {
+    //     if (selectedOption === quizData.correctAnswer) {
+    //         setResult('Correct!');
+    //     } else {
+    //         setResult('Incorrect! The correct answer was ' + quizData.correctAnswer);
+    //     }a
+    // };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswer`, {
+                wordId: quizData.wordId,
+                selectedOption,
+            });
+    
+            const { correct, correctAnswer } = response.data;
+            setResult(correct ? 'Correct!' : `Incorrect! The correct answer was ${correctAnswer}`);
+        } catch (error) {
+            console.error('Error submitting answer:', error);
         }
     };
+    
+    
 
     if (loading) {
         return <CircularProgress />;
@@ -47,7 +65,7 @@ const Quiz = () => {
         <Container maxWidth="sm">
             <Paper elevation={3} className="quiz-container">
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Quiz App
+                    Varshith's App
                 </Typography>
                 {quizData ? (
                     <>
@@ -64,7 +82,8 @@ const Quiz = () => {
                             <Button variant="contained" color="primary" onClick={handleSubmit} className="submit-button">
                                 Submit
                             </Button>
-                            <Button variant="contained" color="secondary" onClick={fetchQuizData} className="new-question-button">
+                            
+                            <Button variant="contained" color="secondary" onClick={fetchQuizData}  style={{ marginTop: '20px' }} className="new-question-button">
                                 New Question
                             </Button>
                         </FormControl>
