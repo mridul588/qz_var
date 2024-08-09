@@ -65,7 +65,7 @@ const Quiz = () => {
         <Container maxWidth="sm">
             <Paper elevation={3} className="quiz-container">
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Varshith's App
+                     Quizz app
                 </Typography>
                 {quizData ? (
                     <>
