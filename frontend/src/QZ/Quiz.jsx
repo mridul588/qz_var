@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Typography, Container, Paper, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import './Quiz.css';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const Quiz = () => {
     const [quizData, setQuizData] = useState(null);
@@ -33,29 +34,28 @@ const Quiz = () => {
         console.log(selectedOption);
     };
 
-    // const handleSubmit = () => {
-    //     if (selectedOption === quizData.correctAnswer) {
-    //         setResult('Correct!');
-    //     } else {
-    //         setResult('Incorrect! The correct answer was ' + quizData.correctAnswer);
-    //     }a
-    // };
-
     const handleSubmit = async () => {
         try {
             const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswer`, {
                 wordId: quizData.wordId,
                 selectedOption,
             });
-    
+
             const { correct, correctAnswer } = response.data;
             setResult(correct ? 'Correct!' : `Incorrect! The correct answer was ${correctAnswer}`);
         } catch (error) {
             console.error('Error submitting answer:', error);
         }
     };
-    
-    
+
+    const playPronunciation = () => {
+        if ('speechSynthesis' in window && quizData) {
+            const utterance = new SpeechSynthesisUtterance(quizData.word);
+            speechSynthesis.speak(utterance);
+        } else {
+            console.error('Speech Synthesis API not supported');
+        }
+    };
 
     if (loading) {
         return <CircularProgress />;
@@ -65,13 +65,20 @@ const Quiz = () => {
         <Container maxWidth="sm">
             <Paper elevation={3} className="quiz-container">
                 <Typography variant="h4" component="h1" gutterBottom>
-                     Quizz app
+                    Quiz App
+                    <VolumeUpIcon
+                            onClick={playPronunciation} 
+                            style={{}}
+                        /> 
                 </Typography>
                 {quizData ? (
                     <>
                         <Typography variant="h6" component="h2">
                             What is the meaning of the word: <strong>{quizData.word}</strong>?
                         </Typography>
+                        
+    
+
                         <FormControl component="fieldset">
                             <FormLabel component="legend">Choose the correct meaning</FormLabel>
                             <RadioGroup value={selectedOption} onChange={handleOptionChange}>
@@ -82,8 +89,8 @@ const Quiz = () => {
                             <Button variant="contained" color="primary" onClick={handleSubmit} className="submit-button">
                                 Submit
                             </Button>
-                            
-                            <Button variant="contained" color="secondary" onClick={fetchQuizData}  style={{ marginTop: '20px' }} className="new-question-button">
+
+                            <Button variant="contained" color="secondary" onClick={fetchQuizData} style={{ marginTop: '20px' }} className="new-question-button">
                                 New Question
                             </Button>
                         </FormControl>
