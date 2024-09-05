@@ -64,10 +64,12 @@ const HomeCompo = () => {
             setWordData({ word: "", meaning: "", userId : user.id}); // Clear the form, but userID ko hatane ki zarurat nahi hai: 
 
         } catch (error) {
-            console.error(error);
-            console.log('Payload:', wordData);
-
-            alert('Failed to add word. Please try again.');
+            if (error.response && error.response.status === 400) {
+                // Show alert if the user tries to add a duplicate word
+                alert(error.response.data || 'Failed to add word. You may have already added this word.');
+            } else {
+                alert('Failed to add word. Please try again.');
+            }
         }
     };
 
