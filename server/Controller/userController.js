@@ -2,9 +2,9 @@ import asyncHandler from 'express-async-handler';
 import Word from '../model/word.js';
 
 const addWord = asyncHandler(async (req, res) => {
-    const { word, meaning } = req.body;
+    const { word, meaning, userId } = req.body;
     try {
-      const newWord = new Word({ word, meaning });
+      const newWord = new Word({ word, meaning, userId });
       await newWord.save();
       res.status(201).send('Word added successfully!');
     } catch (error) {
@@ -60,7 +60,13 @@ const submitAnswer = asyncHandler(async (req, res) => {
 const qz = asyncHandler(async (req, res) => {
   try {
       // Calculate total weight for all words
-      const words = await Word.find();
+      const { userId } = req.body;   //just to get req.body, we sent a post reqest and fethced things. 
+      
+      const words = await Word.find({userId}); //selective filtering of wirds
+     // console.log(words);
+
+      if (words.length === 0) return res.status(404).send('No words found for this user.');
+
       const totalWeight = words.reduce((sum, word) => sum + word.incorrectCount + 1, 0);
 
       // Randomly select a word based on weight

@@ -4,7 +4,7 @@ import { addWord , qz, submitAnswer } from "../Controller/userController.js";
 const router = express.Router();
 
 router.post("/add",addWord);
-router.get("/qz",qz);
+router.post("/qz",qz);
 router.post("/submitAnswer",submitAnswer);
 
 

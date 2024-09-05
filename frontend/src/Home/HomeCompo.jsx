@@ -1,18 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import axios from 'axios';
 import './HomeCompo.css';
+import { SignIn, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 
 
 const HomeCompo = () => {
+    const { isSignedIn, user } = useUser();
+
     const navigate = useNavigate();
+   
+    //USE EFFECT TO LOG IN USER INFO : 
+    useEffect(() => {
+        if(user){
+            console.log(" user info ", user);
+        }
+    }, [user]); 
+
+    useEffect(() => {
+        if (user) {
+            setWordData(prev => ({
+                ...prev,
+                userId: user.id // Update userId when user is available
+            }));
+        }
+    }, [user]);
+
     const [wordData, setWordData] = useState({
         word: "",
         meaning: "",
+       userId: user?.id || "" 
+       //user's userID from CLERK []
     });
+    
 
-    const { word, meaning } = wordData;
+    const { word, meaning } = wordData; //object destructuring, did this to get the word and the meanig from wordData object;
 
     const handleInputChange = (prop) => (event) => {
         setWordData({
@@ -34,14 +57,24 @@ const HomeCompo = () => {
         };
 
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/add`, wordData, { headers });
+            const response = await axios.post(`http://localhost:5000/api/user/add`, wordData, { headers });
             alert('Word added successfully!');
-            setWordData({ word: "", meaning: "" }); // Clear the form
+            console.log('Payload:', wordData);
+
+            setWordData({ word: "", meaning: "", userId : user.id}); // Clear the form, but userID ko hatane ki zarurat nahi hai: 
+
         } catch (error) {
             console.error(error);
+            console.log('Payload:', wordData);
+
             alert('Failed to add word. Please try again.');
         }
     };
+
+     // Return SignIn component if not signed in
+     if (!isSignedIn) {
+        return <SignIn />;
+     }
 
     return (
         <div id="word-form">

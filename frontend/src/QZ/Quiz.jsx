@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Typography, Container, Paper, CircularProgress } from '@mui/material';
-import axios from 'axios';
+import axios from 'axios'
+import { SignIn, useUser } from '@clerk/clerk-react';
 import './Quiz.css';
+
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const Quiz = () => {
+    const { isSignedIn, user } = useUser();
     const [quizData, setQuizData] = useState(null);
     const [selectedOption, setSelectedOption] = useState('');
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
         fetchQuizData();
     }, []);
+
+    
+    if (!isSignedIn) {
+        return <SignIn />;
+    }
 
     const fetchQuizData = async () => {
         setLoading(true);
         setSelectedOption('');
         setResult(null);
         try {
-            const response = await axios.get(`https://qz-var.vercel.app/api/user/qz`);
+            const response = await axios.post(`http://localhost:5000/api/user/qz`, {
+                userId : user.id
+            });
             setQuizData(response.data);
             console.log(response.data);
             setLoading(false);
@@ -36,7 +47,7 @@ const Quiz = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswer`, {
+            const response = await axios.post(`http://localhost:5000/api/user/submitAnswer`, {
                 wordId: quizData.wordId,
                 selectedOption,
             });
