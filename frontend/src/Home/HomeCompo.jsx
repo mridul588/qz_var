@@ -19,13 +19,13 @@ const HomeCompo = () => {
     }, [user]); 
 
     useEffect(() => {
-        if (user) {
-            setWordData(prev => ({
-                ...prev,
-                userId: user.id // Update userId when user is available
-            }));
-        }
-    }, [user]);
+    if (user) {
+        setWordData(prev => ({
+            ...prev,
+            userId: user.id // Update userId when user is available
+        }));
+    }
+}, [user]);
 
     const [wordData, setWordData] = useState({
         word: "",
@@ -57,7 +57,7 @@ const HomeCompo = () => {
         };
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/user/add`, wordData, { headers });
+            const response = await axios.post(`https://qz-var.vercel.app/api/user/add`, wordData, { headers });
             alert('Word added successfully!');
             console.log('Payload:', wordData);
 

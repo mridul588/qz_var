@@ -28,7 +28,7 @@ const Quiz = () => {
         setSelectedOption('');
         setResult(null);
         try {
-            const response = await axios.post(`http://localhost:5000/api/user/qz`, {
+            const response = await axios.post(`https://qz-var.vercel.app/api/user/qz`, {
                 userId : user.id
             });
             setQuizData(response.data);
@@ -47,7 +47,7 @@ const Quiz = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post(`http://localhost:5000/api/user/submitAnswer`, {
+            const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswer`, {
                 wordId: quizData.wordId,
                 selectedOption,
             });
