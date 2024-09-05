@@ -3,9 +3,19 @@ import Word from '../model/word.js';
 
 const addWord = asyncHandler(async (req, res) => {
     const { word, meaning, userId } = req.body;
+  
     try {
+      // Check if the word already exists for this user
+      const existingWord = await Word.findOne({ word, userId });
+  
+      if (existingWord) {
+        return res.status(400).send('You have already added this word.');
+      }
+  
+      // If the word does not exist for this user, create a new word
       const newWord = new Word({ word, meaning, userId });
       await newWord.save();
+  
       res.status(201).send('Word added successfully!');
     } catch (error) {
       res.status(400).send('Error adding word: ' + error.message);
