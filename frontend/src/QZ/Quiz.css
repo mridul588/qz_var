@@ -1,132 +1,17 @@
 .quiz-container {
-    padding: 30px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
     margin-top: 50px;
+    padding: 20px;
+    text-align: center;
     font-family: "Poppins", sans-serif;
 }
 
-.quiz-container h1 {
-    font-size: 32px;
-    color: #333;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.quiz-container h2 {
-    font-size: 22px;
-    color: #444;
-    margin-bottom: 15px;
-}
-
-.quiz-container h6 {
-    color: #666;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.quiz-container .MuiFormControl-root {
-    margin: 15px 0;
-    text-align: left;
-}
-
-.quiz-container .MuiFormControl-root .MuiFormLabel-root {
-    font-size: 16px;
-    color: #777;
-    margin-bottom: 10px;
-    font-family: "Poppins", sans-serif;
-}
-
-.quiz-container .MuiRadio-root {
-    color: dodgerblue;
-}
-
-.quiz-container .MuiRadio-root.Mui-checked {
-    color: dodgerblue;
-}
-
-.quiz-container .submit-button {
-    width: 100%;
-    padding: 12px;
-    background-color: dodgerblue;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
+.submit-button {
     margin-top: 20px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.quiz-container .submit-button:hover {
-    background-color: deepskyblue;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.quiz-container .new-question-button {
-    width: 100%;
-    padding: 12px;
-    background-color: mediumseagreen;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
+.result {
     margin-top: 20px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.quiz-container .new-question-button:hover {
-    background-color: seagreen;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.quiz-container .result {
-    margin-top: 20px;
-    color: #ff6347;
-    font-size: 18px;
     font-weight: bold;
 }
 
-.quiz-container svg {
-    cursor: pointer;
-    margin-left: 10px;
-    color: dodgerblue;
-    transition: color 0.3s ease;
-}
 
-.quiz-container svg:hover {
-    color: deepskyblue;
-}
-
-/* Loading Spinner */
-.MuiCircularProgress-root {
-    display: block;
-    margin: 40px auto;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    .quiz-container {
-        width: 100%;
-        padding: 20px;
-    }
-
-    .quiz-container h1 {
-        font-size: 28px;
-    }
-
-    .quiz-container h2 {
-        font-size: 20px;
-    }
-
-    .quiz-container .submit-button,
-    .quiz-container .new-question-button {
-        padding: 10px;
-        font-size: 14px;
-    }
-}

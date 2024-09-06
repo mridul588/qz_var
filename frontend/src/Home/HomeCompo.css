@@ -6,7 +6,6 @@
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     font-family: "Poppins", sans-serif;
-    padding-bottom: 20px;
 }
 
 #word-form h1 {
@@ -39,19 +38,6 @@
     margin-bottom: 20px;
 }
 
-#word-form form .MuiTextField-root .MuiInputBase-input {
-    padding: 10px;
-    font-family: "Poppins", sans-serif;
-}
-
-#word-form form .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: dodgerblue; /* Highlight border on focus */
-}
-
-#word-form form .MuiTextField-root .MuiOutlinedInput-root.Mui-focused {
-    box-shadow: 0 0 5px rgba(30, 144, 255, 0.2); /* Focused shadow effect */
-}
-
 #word-form form .submit-button {
     width: 100%;
     padding: 12px;
@@ -63,72 +49,10 @@
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 #word-form form .submit-button:hover {
     background-color: deepskyblue;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-#word-form form .submit-button:focus {
-    outline: none;
-    background-color: skyblue;
-    box-shadow: 0 0 6px rgba(0, 191, 255, 0.4);
-}
-
-#word-form form .MuiButton-contained {
-    width: 100%;
-    padding: 12px;
-    background-color: dodgerblue;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#word-form form .MuiButton-contained:hover {
-    background-color: deepskyblue;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* Quiz Button */
-#word-form .MuiButton-root {
-    width: 100%;
-    margin-top: 20px;
-    padding: 12px;
-    background-color: mediumseagreen;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#word-form .MuiButton-root:hover {
-    background-color: seagreen;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    #word-form {
-        width: 90%;
-    }
-
-    #word-form h1 {
-        font-size: 24px;
-    }
-
-    #word-form form .submit-button {
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    #word-form .MuiButton-root {
-        padding: 10px;
-        font-size: 14px;
-    }
 }

@@ -1,41 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Box, Typography } from '@mui/material';
+import { Button, TextField } from '@mui/material';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import axios from 'axios';
 import './HomeCompo.css';
 import { SignIn, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 
+
 const HomeCompo = () => {
-    const { isSignedIn, user } = useUser(); // Get user info from Clerk
+
+    const { isSignedIn, user } = useUser();
+
     const navigate = useNavigate();
-
-    // Log user info when user is available
+   
+    //USE EFFECT TO LOG IN USER INFO : 
     useEffect(() => {
-        if (user) {
-            console.log("User info: ", user);
+        if(user){
+            console.log(" user info ", user);
         }
-    }, [user]);
+    }, [user]); 
 
-    // State for word and meaning, userId is handled separately when user is available
+    useEffect(() => {
+    if (user) {
+        setWordData(prev => ({
+            ...prev,
+            userId: user.id // Update userId when user is available
+        }));
+    }
+}, [user]);
+
     const [wordData, setWordData] = useState({
         word: "",
-        meaning: ""
+        meaning: "",
+       userId: user?.id || "" 
+       //user's userID from CLERK []
     });
+    
 
-    // Update wordData when user is available
-    useEffect(() => {
-        if (user) {
-            setWordData(prev => ({
-                ...prev,
-                userId: user.id // Add userId when user is available
-            }));
-        }
-    }, [user]);
+    const { word, meaning } = wordData; //object destructuring, did this to get the word and the meanig from wordData object;
 
-    // Destructure word and meaning for easier access
-    const { word, meaning } = wordData;
-
-    // Handle input change for form fields
     const handleInputChange = (prop) => (event) => {
         setWordData({
             ...wordData,
@@ -43,7 +46,6 @@ const HomeCompo = () => {
         });
     };
 
-    // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -52,19 +54,20 @@ const HomeCompo = () => {
             return;
         }
 
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
         try {
-            const headers = { 'Content-Type': 'application/json' };
-            const response = await axios.post('https://qz-var.vercel.app/api/user/add', wordData, { headers });
-            
+            const response = await axios.post(`https://qz-var.vercel.app/api/user/add`, wordData, { headers });
             alert('Word added successfully!');
             console.log('Payload:', wordData);
 
-            // Reset the form, keeping the userId
-            setWordData({ word: "", meaning: "", userId: user.id });
+            setWordData({ word: "", meaning: "", userId : user.id}); // Clear the form, but userID ko hatane ki zarurat nahi hai: 
 
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                // Alert if a duplicate word is being added by the same user
+                // Show alert if the user tries to add a duplicate word
                 alert(error.response.data || 'Failed to add word. You may have already added this word.');
             } else {
                 alert('Failed to add word. Please try again.');
@@ -72,53 +75,47 @@ const HomeCompo = () => {
         }
     };
 
-    // Show the SignIn component if the user is not signed in
-    if (!isSignedIn) {
+     // Return SignIn component if not signed in
+     if (!isSignedIn) {
         return <SignIn />;
-    }
+     }
 
     return (
-        <div>
-          
+        <div >
 
-            {/* Word Form */}
-            <Box id="word-form" sx={{ maxWidth: '500px', margin: 'auto', padding: '20px' }}>
-                <Typography variant="h4" gutterBottom>Add New Word</Typography>
-                <Typography variant="body1" gutterBottom>
-                    Enter a word and its meaning to add to your vocabulary list.
-                </Typography>
-
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        required
-                        variant="outlined"
-                        type="text"
-                        label="Word"
-                        value={word}
-                        onChange={handleInputChange("word")}
-                        placeholder="Enter Word"
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
-                        required
-                        variant="outlined"
-                        type="text"
-                        label="Meaning"
-                        value={meaning}
-                        onChange={handleInputChange("meaning")}
-                        placeholder="Enter Meaning"
-                        fullWidth
-                        margin="normal"
-                    />
-                    <Button variant="contained" type="submit" sx={{ mt: 2 }}>Submit</Button>
-                </form>
-                
-                {/* Quiz Button */}
-                <Button variant="contained" sx={{ mt: 2 }} onClick={() => navigate("/quiz")}>
-                    Quiz
-                </Button>
-            </Box>
+      
+        <div id="word-form">
+            <h1>Add New Word</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="word">Word:</label>
+                <TextField
+                    required
+                    variant="outlined"
+                    type="text"
+                    value={word}
+                    onChange={handleInputChange("word")}
+                    name="word"
+                    id="word"
+                    placeholder="Enter Word"
+                    fullWidth
+                />
+                <label htmlFor="meaning">Meaning:</label>
+                <TextField
+                    required
+                    variant="outlined"
+                    type="text"
+                    value={meaning}
+                    onChange={handleInputChange("meaning")}
+                    name="meaning"
+                    id="meaning"
+                    placeholder="Enter Meaning"
+                    fullWidth
+                />
+                <Button variant="contained" type="submit" className="submit-button">Submit</Button>
+               
+            </form>
+            <Button variant="contained" onClick={()=>{navigate("/quiz")}}> Quiz</Button>
+        </div>
         </div>
     );
 };
