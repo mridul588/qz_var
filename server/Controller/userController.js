@@ -69,38 +69,59 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
 const qz = asyncHandler(async (req, res) => {
   try {
-      // Calculate total weight for all words
-      const { userId } = req.body;   //just to get req.body, we sent a post reqest and fethced things. 
-      
-      const words = await Word.find({userId}); //selective filtering of wirds
-     // console.log(words);
+      // Get userId from the request body
+      const { userId } = req.body;
+
+      // Fetch words for the current user
+      const words = await Word.find({ userId });
 
       if (words.length === 0) return res.status(404).send('No words found for this user.');
 
-      const totalWeight = words.reduce((sum, word) => sum + word.incorrectCount + 1, 0);
+      // Handle case where user has fewer than 4 words
+      let incorrectOptions = [];
+      if (words.length < 4) {
+          // Use fallback options if user has fewer than 4 words
+          incorrectOptions = ["malevolence", "solitude", "harmony"];
+      } else {
+          // Calculate total weight for all words
+          const totalWeight = words.reduce((sum, word) => sum + word.incorrectCount + 1, 0);
 
-      // Randomly select a word based on weight
-      let random = Math.random() * totalWeight;
-      let selectedWord;
-      for (const word of words) {
-          random -= word.incorrectCount + 1;
-          if (random <= 0) {
-              selectedWord = word;
-              break;
+          // Randomly select a word based on weight
+          let random = Math.random() * totalWeight;
+          let selectedWord;
+          for (const word of words) {
+              random -= word.incorrectCount + 1;
+              if (random <= 0) {
+                  selectedWord = word;
+                  break;
+              }
           }
+
+          if (!selectedWord) return res.status(404).send('No words found');
+
+          // Select incorrect options from user's word list, excluding the selected word
+          incorrectOptions = await Word.aggregate([
+              { $match: { _id: { $ne: selectedWord._id }, userId: userId } }, // Only select from user's words
+              { $sample: { size: 3 } }, // Randomly select 3 words
+          ]).then(options => options.map(opt => opt.meaning));
       }
 
-      if (!selectedWord) return res.status(404).send('No words found');
+      // If the user has fewer than 4 words, use fallback options
+      if (words.length < 4) {
+          incorrectOptions = ["malevolence", "solitude", "harmony"];
+      }
 
-      const incorrectOptions = await Word.aggregate([
-          { $match: { _id: { $ne: selectedWord._id } } },
-          { $sample: { size: 3 } },
-      ]);
-
-      const options = [selectedWord.meaning, ...incorrectOptions.map(opt => opt.meaning)];
+      // Combine the correct answer with incorrect options
+      const options = [selectedWord.meaning, ...incorrectOptions];
       const shuffledOptions = options.sort(() => 0.5 - Math.random());
 
-      res.json({ word: selectedWord.word, options: shuffledOptions, correctAnswer: selectedWord.meaning, wordId: selectedWord._id });
+      // Respond with the quiz data
+      res.json({
+          word: selectedWord.word,
+          options: shuffledOptions,
+          correctAnswer: selectedWord.meaning,
+          wordId: selectedWord._id
+      });
   } catch (error) {
       res.status(500).send('Error fetching quiz data: ' + error.message);
   }
