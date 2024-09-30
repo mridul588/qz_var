@@ -115,6 +115,7 @@ const HomeCompo = () => {
                
             </form>
             <Button variant="contained" onClick={()=>{navigate("/quiz")}}> Quiz</Button>
+            <Button variant="contained" style={{marginLeft : '15px'}} onClick={()=>{navigate("/flash")}}> Blind</Button>
         </div>
         </div>
     );

@@ -69,42 +69,58 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
 const qz = asyncHandler(async (req, res) => {
     try {
-        // Calculate total weight for all words
-        const { userId } = req.body;   //just to get req.body, we sent a post reqest and fethced things. 
+        const { userId } = req.body;  // Extract userId from the request body
         
-        const words = await Word.find({userId}); //selective filtering of wirds
-       // console.log(words);
-  
+        // Fetch all words associated with the user
+        const words = await Word.find({ userId });
+
         if (words.length === 0) return res.status(404).send('No words found for this user.');
-  
-        const totalWeight = words.reduce((sum, word) => sum + word.incorrectCount + 1, 0);
-  
-        // Randomly select a word based on weight
+
+        // Calculate total weight for all words
+        const totalWeight = words.reduce((sum, word) => {
+            const totalAttempts = word.correctCount + word.incorrectCount;
+            // Priority: Least attempts + More incorrect count
+            const weight = (1 / (totalAttempts + 1)) * (word.incorrectCount + 1); // Inverse of total attempts + bias towards incorrect words
+            return sum + weight;
+        }, 0);
+
+        // Randomly select a word based on the weighted priority
         let random = Math.random() * totalWeight;
         let selectedWord;
         for (const word of words) {
-            random -= word.incorrectCount + 1;
+            const totalAttempts = word.correctCount + word.incorrectCount;
+            const weight = (1 / (totalAttempts + 1)) * (word.incorrectCount + 1);
+            random -= weight;
+
             if (random <= 0) {
                 selectedWord = word;
                 break;
             }
         }
-  
+
         if (!selectedWord) return res.status(404).send('No words found');
-  
+
+        // Fetch 3 incorrect options (not the selected word)
         const incorrectOptions = await Word.aggregate([
-            { $match: { _id: { $ne: selectedWord._id } } },
+            { $match: { _id: { $ne: selectedWord._id }, userId } },
             { $sample: { size: 3 } },
         ]);
-  
+
+        // Prepare quiz options
         const options = [selectedWord.meaning, ...incorrectOptions.map(opt => opt.meaning)];
         const shuffledOptions = options.sort(() => 0.5 - Math.random());
-  
-        res.json({ word: selectedWord.word, options: shuffledOptions, correctAnswer: selectedWord.meaning, wordId: selectedWord._id });
+
+        res.json({
+            word: selectedWord.word,
+            options: shuffledOptions,
+            correctAnswer: selectedWord.meaning,
+            wordId: selectedWord._id
+        });
     } catch (error) {
         res.status(500).send('Error fetching quiz data: ' + error.message);
     }
-  });
+});
+
   
 
 
