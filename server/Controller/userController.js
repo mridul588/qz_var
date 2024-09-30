@@ -67,6 +67,26 @@ const submitAnswer = asyncHandler(async (req, res) => {
     }
 });
 
+const submitAnswerFlash = asyncHandler(async (req, res) => {
+    try {
+        const { wordId, isCorrect } = req.body; // Expecting 'isCorrect' from the frontend
+
+        const word = await Word.findById(wordId);
+
+        if (!word) {
+            return res.status(404).send('Word not found');
+        }
+
+        // Update the word performance based on whether the answer was correct or incorrect
+        await updateWordPerformance(wordId, isCorrect);
+
+        res.json({ correctAnswer: word.meaning, correct: isCorrect });
+    } catch (error) {
+        res.status(500).send('Error submitting answer: ' + error.message);
+    }
+});
+
+
 const qz = asyncHandler(async (req, res) => {
     try {
         const { userId } = req.body;  // Extract userId from the request body
@@ -124,4 +144,4 @@ const qz = asyncHandler(async (req, res) => {
   
 
 
-  export {addWord , qz , submitAnswer};
+  export {addWord , qz , submitAnswer , submitAnswerFlash};

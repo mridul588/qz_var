@@ -8,7 +8,7 @@ const wordSchema = new Schema({
     meaning: { type: String, required: true },
     correctCount: { type: Number, default: 0 }, 
     incorrectCount: { type: Number, default: 0 },
-    userId: { type: String, required: true }, // for the user 
+    userId: { type: String, required: true },  
 });
 
 const Word = mongoose.model('Word', wordSchema);

@@ -45,17 +45,18 @@ const FlashCard = () => {
 
     const handleAnswer = async (isCorrect) => {
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswer`, {
+            const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswerFlash`, {
                 wordId: quizData.wordId,
-               isCorrect // Send the correct meaning if "Correct" button is clicked
+                isCorrect // Send the correct flag depending on the button clicked
             });
-
+    
             const { correct, correctAnswer } = response.data;
-            setResult(correct ? 'Correct!' : `Incorrect!`);
+            setResult(correct ? 'Correct!' : 'Incorrect!');
         } catch (error) {
             console.error('Error submitting answer:', error);
         }
     };
+    
 
     const playPronunciation = () => {
         if ('speechSynthesis' in window && quizData) {
