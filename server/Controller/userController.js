@@ -2,10 +2,20 @@ import asyncHandler from 'express-async-handler';
 import Word from '../model/word.js';
 
 const addWord = asyncHandler(async (req, res) => {
-    const { word, meaning } = req.body;
+    const { word, meaning, userId } = req.body;
+  
     try {
-      const newWord = new Word({ word, meaning });
+      // Check if the word already exists for this user
+      const existingWord = await Word.findOne({ word, userId });
+  
+      if (existingWord) {
+        return res.status(400).send('You have already added this word.');
+      }
+  
+      // If the word does not exist for this user, create a new word
+      const newWord = new Word({ word, meaning, userId });
       await newWord.save();
+  
       res.status(201).send('Word added successfully!');
     } catch (error) {
       res.status(400).send('Error adding word: ' + error.message);
@@ -58,38 +68,44 @@ const submitAnswer = asyncHandler(async (req, res) => {
 });
 
 const qz = asyncHandler(async (req, res) => {
-  try {
-      // Calculate total weight for all words
-      const words = await Word.find();
-      const totalWeight = words.reduce((sum, word) => sum + word.incorrectCount + 1, 0);
-
-      // Randomly select a word based on weight
-      let random = Math.random() * totalWeight;
-      let selectedWord;
-      for (const word of words) {
-          random -= word.incorrectCount + 1;
-          if (random <= 0) {
-              selectedWord = word;
-              break;
-          }
-      }
-
-      if (!selectedWord) return res.status(404).send('No words found');
-
-      const incorrectOptions = await Word.aggregate([
-          { $match: { _id: { $ne: selectedWord._id } } },
-          { $sample: { size: 3 } },
-      ]);
-
-      const options = [selectedWord.meaning, ...incorrectOptions.map(opt => opt.meaning)];
-      const shuffledOptions = options.sort(() => 0.5 - Math.random());
-
-      res.json({ word: selectedWord.word, options: shuffledOptions, correctAnswer: selectedWord.meaning, wordId: selectedWord._id });
-  } catch (error) {
-      res.status(500).send('Error fetching quiz data: ' + error.message);
-  }
-});
-
+    try {
+        // Calculate total weight for all words
+        const { userId } = req.body;   //just to get req.body, we sent a post reqest and fethced things. 
+        
+        const words = await Word.find({userId}); //selective filtering of wirds
+       // console.log(words);
+  
+        if (words.length === 0) return res.status(404).send('No words found for this user.');
+  
+        const totalWeight = words.reduce((sum, word) => sum + word.incorrectCount + 1, 0);
+  
+        // Randomly select a word based on weight
+        let random = Math.random() * totalWeight;
+        let selectedWord;
+        for (const word of words) {
+            random -= word.incorrectCount + 1;
+            if (random <= 0) {
+                selectedWord = word;
+                break;
+            }
+        }
+  
+        if (!selectedWord) return res.status(404).send('No words found');
+  
+        const incorrectOptions = await Word.aggregate([
+            { $match: { _id: { $ne: selectedWord._id } } },
+            { $sample: { size: 3 } },
+        ]);
+  
+        const options = [selectedWord.meaning, ...incorrectOptions.map(opt => opt.meaning)];
+        const shuffledOptions = options.sort(() => 0.5 - Math.random());
+  
+        res.json({ word: selectedWord.word, options: shuffledOptions, correctAnswer: selectedWord.meaning, wordId: selectedWord._id });
+    } catch (error) {
+        res.status(500).send('Error fetching quiz data: ' + error.message);
+    }
+  });
+  
 
 
   export {addWord , qz , submitAnswer};
