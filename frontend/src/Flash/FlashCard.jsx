@@ -47,7 +47,7 @@ const FlashCard = () => {
         try {
             const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswer`, {
                 wordId: quizData.wordId,
-                selectedOption: isCorrect ? quizData.meaning : '' // Send the correct meaning if "Correct" button is clicked
+               isCorrect // Send the correct meaning if "Correct" button is clicked
             });
 
             const { correct, correctAnswer } = response.data;
