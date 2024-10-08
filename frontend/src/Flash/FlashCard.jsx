@@ -5,7 +5,7 @@ import { SignIn, useUser } from '@clerk/clerk-react';
 import '../QZ/Quiz.css';
 
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-
+const API_URL = "http://localhost:5000/api/";
 const FlashCard = () => {
     const { isSignedIn, user } = useUser();
     const [quizData, setQuizData] = useState(null);
@@ -18,7 +18,7 @@ const FlashCard = () => {
         setRevealed(false);
         setResult(null);
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/qz`, {
+            const response = await axios.post(`${API_URL}user/qz`, {
                 userId: user.id
             });
             setQuizData(response.data);
@@ -45,7 +45,7 @@ const FlashCard = () => {
 
     const handleAnswer = async (isCorrect) => {
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswerFlash`, {
+            const response = await axios.post(`${API_URL}user/submitAnswerFlash`, {
                 wordId: quizData.wordId,
                 isCorrect // Send the correct flag depending on the button clicked
             });

@@ -141,7 +141,26 @@ const qz = asyncHandler(async (req, res) => {
     }
 });
 
+const getUserWords = asyncHandler(async (req, res) => {
+    const { id } = req.params; // Extract user ID from the request parameters
+
+
+    try {
+        const words = await Word.find({ userId: id }); // Find words for the user
+
+        if (words.length === 0) {
+            return res.status(404).send('No words found for this user.');
+        }
+
+        res.json(words); // Return the words as a JSON response
+    } catch (error) {
+        res.status(500).send('Error fetching words: ' + error.message);
+    }
+});
+
+
+
   
 
 
-  export {addWord , qz , submitAnswer , submitAnswerFlash};
+  export {addWord , qz , submitAnswer , submitAnswerFlash, getUserWords};

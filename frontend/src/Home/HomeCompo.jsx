@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import axios from 'axios';
 import './HomeCompo.css';
 import { SignIn, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-
-
+const API_URL = "http://localhost:5000/api/";
 const HomeCompo = () => {
 
     const { isSignedIn, user } = useUser();
@@ -59,7 +57,7 @@ const HomeCompo = () => {
         };
 
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/add`, wordData, { headers });
+            const response = await axios.post(`${API_URL}user/add`, wordData, { headers });
             alert('Word added successfully!');
             console.log('Payload:', wordData);
 
@@ -116,6 +114,7 @@ const HomeCompo = () => {
             </form>
             <Button variant="contained" onClick={()=>{navigate("/quiz")}}> Quiz</Button>
             <Button variant="contained" style={{marginLeft : '15px'}} onClick={()=>{navigate("/flash")}}> Blind</Button>
+            <Button variant="contained" style={{marginLeft : '15px'}} onClick={()=>{navigate("/my-words")}}> My Words</Button>
         </div>
         </div>
     );

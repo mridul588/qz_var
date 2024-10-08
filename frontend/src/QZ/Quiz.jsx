@@ -3,7 +3,7 @@ import { Button, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Ty
 import axios from 'axios'
 import { SignIn, useUser } from '@clerk/clerk-react';
 import './Quiz.css';
-
+const API_URL = "http://localhost:5000/api/";
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const Quiz = () => {
@@ -28,7 +28,7 @@ const Quiz = () => {
         setSelectedOption('');
         setResult(null);
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/qz`, {
+            const response = await axios.post(`${API_URL}user/qz`, {
                 userId : user.id
             });
             setQuizData(response.data);
@@ -47,7 +47,7 @@ const Quiz = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post(`https://qz-var.vercel.app/api/user/submitAnswer`, {
+            const response = await axios.post(`${API_URL}user/submitAnswer`, {
                 wordId: quizData.wordId,
                 selectedOption,
             });

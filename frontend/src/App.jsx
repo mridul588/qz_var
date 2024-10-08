@@ -5,6 +5,7 @@ import './App.css'
 import HomeCompo from './Home/HomeCompo';
 import  Quiz  from './QZ/Quiz';
 import FlashCard from './Flash/FlashCard';
+import MyWords from './MyWords/MyWords';
 
 function App() {
   
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path='/' element={<HomeCompo />}/>
         <Route path='/quiz' element={<Quiz />}/>
+        <Route path="/my-words" element={<MyWords />} /> 
         <Route path='/flash' element={<FlashCard />} />
       </Routes>
     </div>
