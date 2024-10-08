@@ -5,7 +5,14 @@ import { SignIn, useUser } from '@clerk/clerk-react';
 import '../QZ/Quiz.css';
 
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-const API_URL = "http://localhost:5000/api/";
+
+
+
+// const API_URL = "http://localhost:5000/api/";
+const API_URL = "https://qz-var.vercel.app/api/";
+
+
+
 const FlashCard = () => {
     const { isSignedIn, user } = useUser();
     const [quizData, setQuizData] = useState(null);

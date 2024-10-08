@@ -4,7 +4,12 @@ import axios from 'axios';
 import './HomeCompo.css';
 import { SignIn, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-const API_URL = "http://localhost:5000/api/";
+
+
+// const API_URL = "http://localhost:5000/api/";
+
+const API_URL = "https://qz-var.vercel.app/api/";
+
 const HomeCompo = () => {
 
     const { isSignedIn, user } = useUser();

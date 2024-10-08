@@ -40,3 +40,31 @@ tr:hover {
 strong {
     color: #007BFF; /* Color for words */
 }
+
+button {
+    background-color: #84b5e9; /* Bootstrap primary color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 12px; /* Padding for a larger button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly grow on hover */
+}
+
+button:focus {
+    outline: none; /* Remove outline */
+    box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5); /* Add shadow for focus */
+}
+
+/* Adjust styles for the meaning text */
+td div {
+    margin-top: 5px; /* Space below the button when meaning is revealed */
+    color: #333; /* Meaning text color */
+    font-weight: normal; /* Normal weight for meaning */
+    font-size: 14px; /* Slightly smaller font size */
+}

@@ -3,7 +3,11 @@ import { Button, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Ty
 import axios from 'axios'
 import { SignIn, useUser } from '@clerk/clerk-react';
 import './Quiz.css';
-const API_URL = "http://localhost:5000/api/";
+
+// const API_URL = "http://localhost:5000/api/";
+
+const API_URL = "https://qz-var.vercel.app/api/";
+
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const Quiz = () => {
