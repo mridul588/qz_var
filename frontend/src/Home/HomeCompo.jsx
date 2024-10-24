@@ -1,46 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Container, Box, Stack, Typography, Paper } from '@mui/material';
 import axios from 'axios';
 import './HomeCompo.css';
 import { SignIn, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 
-
 // const API_URL = "http://localhost:5000/api/";
-
 const API_URL = "https://qz-var.vercel.app/api/";
 
 const HomeCompo = () => {
-
     const { isSignedIn, user } = useUser();
-
     const navigate = useNavigate();
-   
-    //USE EFFECT TO LOG IN USER INFO : 
+    const [darkMode, setDarkMode] = useState(false);
+
     useEffect(() => {
-        if(user){
+        if (user) {
             console.log(" user info ", user);
         }
-    }, [user]); 
+    }, [user]);
 
     useEffect(() => {
-    if (user) {
-        setWordData(prev => ({
-            ...prev,
-            userId: user.id // Update userId when user is available
-        }));
-    }
-}, [user]);
+        if (user) {
+            setWordData(prev => ({
+                ...prev,
+                userId: user.id
+            }));
+        }
+    }, [user]);
 
     const [wordData, setWordData] = useState({
         word: "",
         meaning: "",
-       userId: user?.id || "" 
-       //user's userID from CLERK []
+        userId: user?.id || ""
     });
-    
 
-    const { word, meaning } = wordData; //object destructuring, did this to get the word and the meanig from wordData object;
+    const { word, meaning } = wordData;
 
     const handleInputChange = (prop) => (event) => {
         setWordData({
@@ -65,12 +59,9 @@ const HomeCompo = () => {
             const response = await axios.post(`${API_URL}user/add`, wordData, { headers });
             alert('Word added successfully!');
             console.log('Payload:', wordData);
-
-            setWordData({ word: "", meaning: "", userId : user.id}); // Clear the form, but userID ko hatane ki zarurat nahi hai: 
-
+            setWordData({ word: "", meaning: "", userId: user.id });
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                // Show alert if the user tries to add a duplicate word
                 alert(error.response.data || 'Failed to add word. You may have already added this word.');
             } else {
                 alert('Failed to add word. Please try again.');
@@ -78,50 +69,70 @@ const HomeCompo = () => {
         }
     };
 
-     // Return SignIn component if not signed in
-     if (!isSignedIn) {
+    if (!isSignedIn) {
         return <SignIn />;
-     }
+    }
 
     return (
-        <div >
-
-      
-        <div id="word-form">
-            <h1>Add New Word</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="word">Word:</label>
-                <TextField
-                    required
-                    variant="outlined"
-                    type="text"
-                    value={word}
-                    onChange={handleInputChange("word")}
-                    name="word"
-                    id="word"
-                    placeholder="Enter Word"
-                    fullWidth
-                />
-                <label htmlFor="meaning">Meaning:</label>
-                <TextField
-                    required
-                    variant="outlined"
-                    type="text"
-                    value={meaning}
-                    onChange={handleInputChange("meaning")}
-                    name="meaning"
-                    id="meaning"
-                    placeholder="Enter Meaning"
-                    fullWidth
-                />
-                <Button variant="contained" type="submit" className="submit-button">Submit</Button>
-               
-            </form>
-            <Button variant="contained" onClick={()=>{navigate("/quiz")}}> Quiz</Button>
-            <Button variant="contained" style={{marginLeft : '15px'}} onClick={()=>{navigate("/flash")}}> Blind</Button>
-            <Button variant="contained" style={{marginLeft : '15px'}} onClick={()=>{navigate("/my-words")}}> My Words</Button>
-        </div>
-        </div>
+        <Container maxWidth="sm" className={darkMode ? 'dark-mode' : 'light-mode'}>
+            <Box
+                component={Paper}
+                elevation={3}
+                p={4}
+                mt={4}
+                sx={{ borderRadius: 2 }}
+            >
+                <Typography variant="h4" component="h1" align="center" gutterBottom>
+                    Add New Word
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                    <Stack spacing={2}>
+                        <TextField
+                            required
+                            variant="outlined"
+                            type="text"
+                            value={word}
+                            onChange={handleInputChange("word")}
+                            label="Word"
+                            placeholder="Enter Word"
+                            fullWidth
+                        />
+                        <TextField
+                            required
+                            variant="outlined"
+                            type="text"
+                            value={meaning}
+                            onChange={handleInputChange("meaning")}
+                            label="Meaning"
+                            placeholder="Enter Meaning"
+                            fullWidth
+                        />
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            className="submit-button"
+                        >
+                            Submit
+                        </Button>
+                    </Stack>
+                </form>
+                <Stack direction="row" justifyContent="center" spacing={2} mt={3}>
+                    <Button variant="contained" color="secondary" onClick={() => { navigate("/quiz") }}>
+                        Quiz
+                    </Button>
+                    <Button variant="contained" color="secondary" onClick={() => { navigate("/flash") }}>
+                        Blind
+                    </Button>
+                    <Button variant="contained" color="secondary" onClick={() => { navigate("/my-words") }}>
+                        My Words
+                    </Button>
+                </Stack>
+                
+            </Box>
+        </Container>
     );
 };
 

@@ -1,6 +1,6 @@
 #word-form {
     width: 400px;
-    max-width: 100%;
+    max-width: 90%; /* Ensure it adjusts to smaller screens */
     margin: 50px auto;
     background-color: lightblue;
     border-radius: 10px;
@@ -8,6 +8,7 @@
     font-family: "Poppins", sans-serif;
 }
 
+/* Responsive h1 */
 #word-form h1 {
     text-align: center;
     margin: 0;
@@ -17,27 +18,29 @@
     color: white;
 }
 
+/* Form styling */
 #word-form form {
     padding: 20px;
     background-color: white;
     border-radius: 10px;
-    font-family: "Poppins", sans-serif;
 }
 
+/* Responsive form labels */
 #word-form form label {
     display: block;
     margin-bottom: 8px;
     font-size: 14px;
     color: gray;
-    font-family: "Poppins", sans-serif;
     text-align: left;
 }
 
+/* Responsive TextField */
 #word-form form .MuiTextField-root {
     width: 100%;
     margin-bottom: 20px;
 }
 
+/* Submit button */
 #word-form form .submit-button {
     width: 100%;
     padding: 12px;
@@ -52,7 +55,50 @@
     transition: background-color 0.3s ease;
 }
 
+/* Hover effect for submit button */
 #word-form form .submit-button:hover {
     background-color: deepskyblue;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 600px) {
+    #word-form {
+        width: 90%; /* Make form more compact on small screens */
+        margin: 20px auto;
+        box-shadow: none; /* Reduce shadows for smaller screens */
+    }
+
+    #word-form h1 {
+        font-size: 22px; /* Adjust font size for smaller screens */
+        padding: 15px 0;
+    }
+
+    #word-form form {
+        padding: 15px;
+    }
+
+    #word-form form label {
+        font-size: 12px; /* Smaller text for labels */
+    }
+
+    #word-form form .submit-button {
+        font-size: 14px; /* Adjust button size */
+        padding: 10px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    #word-form {
+        width: 500px; /* Wider form for tablets */
+    }
+
+    #word-form h1 {
+        font-size: 26px; /* Adjust font size for tablets */
+    }
+
+    #word-form form .submit-button {
+        font-size: 15px; /* Slightly smaller font size for buttons */
+        padding: 12px;
+    }
 }

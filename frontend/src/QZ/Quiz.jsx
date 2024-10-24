@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Typography, Container, Paper, CircularProgress } from '@mui/material';
-import axios from 'axios'
+import {
+    Button, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Typography,
+    Container, Paper, CircularProgress, Stack, Box
+} from '@mui/material';
+import axios from 'axios';
 import { SignIn, useUser } from '@clerk/clerk-react';
 import './Quiz.css';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 // const API_URL = "http://localhost:5000/api/";
-
 const API_URL = "https://qz-var.vercel.app/api/";
-
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const Quiz = () => {
     const { isSignedIn, user } = useUser();
@@ -17,12 +18,10 @@ const Quiz = () => {
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
         fetchQuizData();
     }, []);
 
-    
     if (!isSignedIn) {
         return <SignIn />;
     }
@@ -33,10 +32,9 @@ const Quiz = () => {
         setResult(null);
         try {
             const response = await axios.post(`${API_URL}user/qz`, {
-                userId : user.id
+                userId: user.id
             });
             setQuizData(response.data);
-            console.log(response.data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching quiz data:', error);
@@ -46,7 +44,6 @@ const Quiz = () => {
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
-        console.log(selectedOption);
     };
 
     const handleSubmit = async () => {
@@ -73,44 +70,85 @@ const Quiz = () => {
     };
 
     if (loading) {
-        return <CircularProgress />;
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <CircularProgress />
+            </Box>
+        );
     }
 
     return (
-        <Container maxWidth="sm">
-            <Paper elevation={3} className="quiz-container">
-                <Typography variant="h4" component="h1" gutterBottom>
-                    Quiz App
-                    <VolumeUpIcon
-                            onClick={playPronunciation} 
-                            style={{}}
-                        /> 
-                </Typography>
+        <Container maxWidth="sm" style={{ paddingTop: '20px' }}>
+            <Paper elevation={3} className="quiz-container" sx={{ p: 4, borderRadius: 2 }}>
                 {quizData ? (
                     <>
-                        <Typography variant="h6" component="h2">
+                        <Stack direction="row" alignItems="center" justifyContent="space-between">
+                            <Typography variant="h4" component="h1">
+                                Quiz Time!
+                            </Typography>
+                            <VolumeUpIcon
+                                onClick={playPronunciation}
+                                sx={{ cursor: 'pointer', fontSize: 30, color: '#3f51b5' }}
+                            />
+                        </Stack>
+                        <Typography variant="h6" component="h2" mt={2}>
                             What is the meaning of the word: <strong>{quizData.word}</strong>?
                         </Typography>
-                        
-    
 
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset" sx={{ mt: 3 }}>
                             <FormLabel component="legend">Choose the correct meaning</FormLabel>
                             <RadioGroup value={selectedOption} onChange={handleOptionChange}>
                                 {quizData.options.map((option, index) => (
-                                    <FormControlLabel key={index} value={option} control={<Radio />} label={option} />
+                                    <FormControlLabel
+                                        key={index}
+                                        value={option}
+                                        control={<Radio />}
+                                        label={option}
+                                    />
                                 ))}
                             </RadioGroup>
-                            <Button variant="contained" color="primary" onClick={handleSubmit} className="submit-button">
+                        </FormControl>
+
+                        <Stack direction="row" spacing={2} mt={3}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={handleSubmit}
+                                className="submit-button"
+                                sx={{
+                                    bgcolor: '#3f51b5',
+                                    '&:hover': { bgcolor: '#303f9f' }
+                                }}
+                            >
                                 Submit
                             </Button>
-
-                            <Button variant="contained" color="secondary" onClick={fetchQuizData} style={{ marginTop: '20px' }} className="new-question-button">
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                fullWidth
+                                onClick={fetchQuizData}
+                                sx={{
+                                    bgcolor: '#f50057',
+                                    '&:hover': { bgcolor: '#c51162' }
+                                }}
+                            >
                                 New Question
                             </Button>
-                        </FormControl>
+                        </Stack>
+
                         {result && (
-                            <Typography variant="h6" component="p" className="result">
+                            <Typography
+                                variant="h6"
+                                component="p"
+                                className="result"
+                                sx={{
+                                    mt: 3,
+                                    color: result.startsWith('Correct') ? 'green' : 'red',
+                                    fontWeight: 'bold',
+                                    textAlign: 'center'
+                                }}
+                            >
                                 {result}
                             </Typography>
                         )}

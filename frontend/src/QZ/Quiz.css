@@ -1,17 +1,77 @@
 .quiz-container {
-    margin-top: 50px;
     padding: 20px;
-    text-align: center;
-    font-family: "Poppins", sans-serif;
-}
-
-.submit-button {
-    margin-top: 20px;
+    border-radius: 10px;
+    max-width: 100%; /* Ensure full width on small screens */
 }
 
 .result {
+    text-align: center;
     margin-top: 20px;
     font-weight: bold;
 }
 
+/* Media Query for small screens */
+@media (max-width: 600px) {
+    .quiz-container {
+        padding: 15px;
+        font-size: 14px; /* Reduce font size slightly on small screens */
+    }
 
+    h1, h2 {
+        font-size: 1.5rem; /* Reduce heading size for smaller screens */
+    }
+
+    .MuiFormLabel-root, .MuiFormControlLabel-label {
+        font-size: 0.9rem; /* Make labels smaller for better fit */
+    }
+
+    .submit-button, .new-question-button {
+        margin-top: 10px;
+    }
+
+    .MuiButton-root {
+        font-size: 0.8rem; /* Adjust button font size */
+        padding: 8px 12px;
+    }
+
+    .MuiTypography-h4 {
+        font-size: 1.25rem; /* Adjust the title font size */
+    }
+
+    .MuiTypography-h6 {
+        font-size: 1rem; /* Adjust quiz word and result font size */
+    }
+}
+
+/* Media Query for tablets */
+@media (min-width: 601px) and (max-width: 960px) {
+    .quiz-container {
+        padding: 25px;
+    }
+
+    .MuiTypography-h4 {
+        font-size: 1.75rem; /* Slightly larger for tablets */
+    }
+
+    .MuiTypography-h6 {
+        font-size: 1.25rem; /* Better readability on medium devices */
+    }
+
+    .MuiButton-root {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+    }
+}
+
+/* Media Query for large screens */
+@media (min-width: 961px) {
+    .quiz-container {
+        max-width: 600px;
+        margin: 0 auto; /* Center on larger screens */
+    }
+
+    .MuiButton-root {
+        padding: 12px 20px; /* Larger buttons for desktop */
+        font-size: 1rem;
+    }
+}
