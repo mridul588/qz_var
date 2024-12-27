@@ -8,8 +8,8 @@ import { SignIn, useUser } from '@clerk/clerk-react';
 import './QuizPublic.css';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
-const API_URL = "http://localhost:5000/api/";
-//const API_URL = "https://qz-var.vercel.app/api/";
+//const API_URL = "http://localhost:5000/api/";
+const API_URL = "https://qz-var.vercel.app/api/";
 
 const QuizPublic = () => {
     const { isSignedIn, user } = useUser();
@@ -48,7 +48,7 @@ const QuizPublic = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post(`${API_URL}user/submitAnswer`, {
+            const response = await axios.post(`${API_URL}user/submitAnswerP`, {
                 wordId: quizData.wordId,
                 selectedOption,
             });

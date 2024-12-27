@@ -10,10 +10,10 @@ const Public = () => {
                     <Button variant="contained" color="secondary" onClick={() => { navigate("/qp") }}>
                         Quiz
                     </Button>
-                    <Button variant="contained" color="secondary" onClick={() => { navigate("/flash-public") }}>
+                    <Button variant="contained" color="secondary" onClick={() => { navigate("/fp") }}>
                         Blind
                     </Button>
-                    <Button variant="contained" color="secondary" onClick={() => { navigate("/my-words-public") }}>
+                    <Button variant="contained" color="secondary" onClick={() => { navigate("/all") }}>
                         My Words
                     </Button>
                 </Stack>

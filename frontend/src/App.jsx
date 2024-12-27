@@ -8,6 +8,8 @@ import FlashCard from './Flash/FlashCard';
 import MyWords from './MyWords/MyWords';
 import Public from './Public/Public';
 import QuizPublic from './PublicCompo/QuizPublic/QuizPublic';
+import FlashPublic from './PublicCompo/FlashPublic/FlashPublic';
+import All from './PublicCompo/All/All';
 
 function App() {
   
@@ -22,6 +24,8 @@ function App() {
         <Route path='/flash' element={<FlashCard />} />
         <Route path='/public' element={<Public />} />
         <Route path='/qp' element={<QuizPublic />} />
+        <Route path='/fp' element={<FlashPublic />} />
+        <Route path='/all' element={<All />} />
       </Routes>
     </div>
       

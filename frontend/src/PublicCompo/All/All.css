@@ -1,0 +1,70 @@
+/* MyWords.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove spacing between cells */
+    margin-top: 20px; /* Space above the table */
+}
+
+th, td {
+    padding: 10px; /* Padding for table cells */
+    border: 1px solid #ddd; /* Light border for cells */
+    text-align: left; /* Align text to the left */
+}
+
+th {
+    background-color: #007BFF; /* Primary color for header */
+    color: white; /* Text color for header */
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray background for even rows */
+}
+
+tr:hover {
+    background-color: #ddd; /* Highlight row on hover */
+}
+
+strong {
+    color: #007BFF; /* Color for words */
+}
+
+button {
+    background-color: #84b5e9; /* Bootstrap primary color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 12px; /* Padding for a larger button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly grow on hover */
+}
+
+button:focus {
+    outline: none; /* Remove outline */
+    box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5); /* Add shadow for focus */
+}
+
+/* Adjust styles for the meaning text */
+td div {
+    margin-top: 5px; /* Space below the button when meaning is revealed */
+    color: #333; /* Meaning text color */
+    font-weight: normal; /* Normal weight for meaning */
+    font-size: 14px; /* Slightly smaller font size */
+}
