@@ -117,6 +117,17 @@ const HomeCompo = () => {
                         >
                             Submit
                         </Button>
+
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            color="primary"
+                            fullWidth
+                            size="large"
+                            onClick={() => {navigate("/public")}}
+                        >
+                            Use Public Words
+                        </Button>
                     </Stack>
                 </form>
                 <Stack direction="row" justifyContent="center" spacing={2} mt={3}>
